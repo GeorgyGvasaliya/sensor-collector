@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	avg            int
+	avg            float32
 	warningMessage string
 )
 
@@ -32,7 +32,7 @@ func doHTTP(url string) int {
 	}
 }
 
-func getAvg(sl []int) (int, string) {
+func getAvg(sl []int) (float32, string) {
 	warning := ""
 	sum := 0
 	length := len(sl)
@@ -52,7 +52,7 @@ func getAvg(sl []int) (int, string) {
 	} else {
 		warning = "All data received without issues"
 	}
-	return sum / length, warning
+	return float32(sum) / float32(length), warning
 }
 
 func main() {
@@ -75,7 +75,7 @@ func main() {
 	}()
 
 	err := http.ListenAndServe(":3000", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		_, err := fmt.Fprintf(writer, "Avg: %d\nSensors: %d\n%s", avg, signals, warningMessage)
+		_, err := fmt.Fprintf(writer, "Avg: %.2f\nSensors: %d\n%s", avg, signals, warningMessage)
 		if err != nil {
 			fmt.Println(err)
 		}
